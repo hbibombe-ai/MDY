@@ -23,7 +23,53 @@ def nom_entreprise() -> str:
     return auth.secret("NOM_ENTREPRISE", "My Destiny")
 
 
-STATIQUE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+# Logo et icône My Destiny. Le code SVG est aussi gardé ici : si le dossier static/ manque (oubli lors du dépôt
+# sur GitHub), les fichiers sont recréés au démarrage au lieu de faire planter la page de connexion.
+_SVG = {
+    "logo_sombre.svg": """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 40" width="196" height="40">
+  <g transform="translate(2,4)">
+    <rect x="0" y="18" width="8" height="14" rx="1.5" fill="#F2B705"/>
+    <rect x="11" y="9" width="8" height="23" rx="1.5" fill="#F2B705"/>
+    <rect x="22" y="0" width="8" height="32" rx="1.5" fill="#F2B705"/>
+  </g>
+  <text x="42" y="29" font-family="'Archivo','Helvetica Neue',Arial,sans-serif" font-size="25" font-weight="800" fill="#F4F5F2" letter-spacing="-0.4">My Destiny</text>
+</svg>""",
+    "logo_clair.svg": """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" width="240" height="56">
+  <g transform="translate(4,10)">
+    <rect x="0" y="22" width="9" height="14" rx="1.5" fill="#F2B705"/>
+    <rect x="12" y="12" width="9" height="24" rx="1.5" fill="#F2B705"/>
+    <rect x="24" y="0" width="9" height="36" rx="1.5" fill="#F2B705"/>
+  </g>
+  <text x="48" y="31" font-family="'Archivo','Helvetica Neue',Arial,sans-serif" font-size="23" font-weight="800" fill="#1B2A35" letter-spacing="-0.3">My Destiny</text>
+  <text x="49" y="47" font-family="'Archivo','Helvetica Neue',Arial,sans-serif" font-size="11.5" fill="#5B6B77">Suivi des chantiers</text>
+</svg>""",
+    "icone.svg": """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+  <rect width="40" height="40" rx="8" fill="#1B2A35"/>
+  <rect x="5" y="20" width="8" height="13" rx="1.5" fill="#F2B705"/>
+  <rect x="16" y="13" width="8" height="20" rx="1.5" fill="#F2B705"/>
+  <rect x="27" y="6" width="8" height="27" rx="1.5" fill="#F2B705"/>
+</svg>""",
+}
+
+
+def _statique() -> str:
+    import tempfile
+    for dossier in (os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"),
+                    os.path.join(tempfile.gettempdir(), "my_destiny_static")):
+        try:
+            os.makedirs(dossier, exist_ok=True)
+            for nom, contenu in _SVG.items():
+                chemin = os.path.join(dossier, nom)
+                if not os.path.exists(chemin):
+                    with open(chemin, "w", encoding="utf-8") as f:
+                        f.write(contenu)
+            return dossier
+        except OSError:
+            continue
+    return dossier
+
+
+STATIQUE = _statique()
 LOGO_SOMBRE = os.path.join(STATIQUE, "logo_sombre.svg")   # texte clair, pour la barre latérale
 LOGO_CLAIR = os.path.join(STATIQUE, "logo_clair.svg")     # texte foncé, pour la page de connexion
 ICONE = os.path.join(STATIQUE, "icone.svg")
