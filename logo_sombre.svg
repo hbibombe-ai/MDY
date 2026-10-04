@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 40" width="196" height="40">
+  <g transform="translate(2,4)">
+    <rect x="0" y="18" width="8" height="14" rx="1.5" fill="#F2B705"/>
+    <rect x="11" y="9" width="8" height="23" rx="1.5" fill="#F2B705"/>
+    <rect x="22" y="0" width="8" height="32" rx="1.5" fill="#F2B705"/>
+  </g>
+  <text x="42" y="29" font-family="'Archivo','Helvetica Neue',Arial,sans-serif" font-size="25" font-weight="800" fill="#F4F5F2" letter-spacing="-0.4">My Destiny</text>
+</svg>
